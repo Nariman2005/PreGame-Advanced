@@ -1,226 +1,394 @@
 // Main JavaScript file for Game Testing Platform
 
+// Flag to indicate script has loaded successfully
+window.scriptLoaded = true;
+
+console.log('Game Testing Platform JS loaded successfully');
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            e.preventDefault();
+            // e.preventDefault(); // Prevent default only if target exists
             const targetId = this.getAttribute('href');
-            
-            if (targetId === '#') return;
-            
+
+            if (targetId === '#') return; // Do nothing if it's just "#"
+
             const targetElement = document.querySelector(targetId);
+
             if (targetElement) {
+                e.preventDefault(); // Prevent default jump only if we found the element
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: targetElement.offsetTop - 80, // Adjusted for fixed header (e.g., 70-80px)
                     behavior: 'smooth'
                 });
+            }
+            // If targetElement is not found, let the default anchor behavior happen (or do nothing)
+        });
+    });
+
+    // Password strength meter
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.querySelector('.password-strength');
+
+    if (passwordInput && passwordStrength) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+            let statusText = '';
+            let statusClass = '';
+
+            switch (true) {
+                case (strength <= 2):
+                    statusText = 'Weak';
+                    statusClass = 'weak';
+                    break;
+                case (strength <= 4):
+                    statusText = 'Moderate';
+                    statusClass = 'moderate';
+                    break;
+                default:
+                    statusText = 'Strong';
+                    statusClass = 'strong';
+                    break;
+            }
+            passwordStrength.textContent = statusText;
+            passwordStrength.className = 'password-strength ' + statusClass;
+        });
+    }
+
+    // Animation for register options
+    const registerOptions = document.querySelectorAll('.register-option');
+    if (registerOptions.length) {
+        registerOptions.forEach((option, index) => {
+            option.style.animationDelay = (index * 0.2) + 's';
+            option.classList.add('fade-in-up');
+        });
+    }
+
+    // Helper function for email validation
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Newsletter form validation
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(event) {
+            const emailInput = this.querySelector('input[type="email"]');
+            if (!emailInput.value.trim() || !isValidEmail(emailInput.value)) {
+                event.preventDefault();
+                alert('Please enter a valid email address for the newsletter.'); // More specific alert
+            }
+        });
+    }
+
+    // Tab functionality for dashboard pages
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    if (tabButtons.length && tabContents.length) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                const targetContent = document.querySelector(this.dataset.target);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+    }
+
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    tooltips.forEach(tooltipHost => { // Renamed variable for clarity
+        let tooltipEl = null; // Keep track of the created tooltip element
+
+        tooltipHost.addEventListener('mouseenter', function() {
+            const tooltipText = this.dataset.tooltip;
+            tooltipEl = document.createElement('div');
+            tooltipEl.className = 'tooltip';
+            tooltipEl.textContent = tooltipText;
+            document.body.appendChild(tooltipEl);
+
+            const rect = this.getBoundingClientRect();
+            // Position tooltip above the element, centered
+            tooltipEl.style.left = (rect.left + (rect.width / 2) - (tooltipEl.offsetWidth / 2)) + 'px';
+            tooltipEl.style.top = (rect.top - tooltipEl.offsetHeight - 10) + 'px'; // 10px gap
+            tooltipEl.classList.add('visible');
+        });
+
+        tooltipHost.addEventListener('mouseleave', function() {
+            if (tooltipEl && document.body.contains(tooltipEl)) {
+                document.body.removeChild(tooltipEl);
+                tooltipEl = null; // Reset for next time
             }
         });
     });
 
+
+    // Initialize modal functionality
+    const modalTriggers = document.querySelectorAll('[data-modal]');
+    const modals = document.querySelectorAll('.modal'); // All modal elements
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modalId = this.dataset.modal;
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('show');
+                document.body.classList.add('modal-open'); // Prevent body scroll
+            }
+        });
+    });
+
+    modalCloseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.classList.remove('show');
+                if (!document.querySelector('.modal.show')) { // Only remove if no other modals are open
+                    document.body.classList.remove('modal-open');
+                }
+            }
+        });
+    });
+
+    modals.forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            // Close if clicked on the modal backdrop itself (not its content)
+            if (e.target === this) {
+                this.classList.remove('show');
+                if (!document.querySelector('.modal.show')) {
+                    document.body.classList.remove('modal-open');
+                }
+            }
+        });
+    });
+
+    // Add main content wrapper (Optional, consider if really needed, can affect layout)
+    // const main = document.querySelector('main');
+    // if (main && !main.querySelector('.main-content')) {
+    //     console.log('Wrapping main content...');
+    //     const mainContent = document.createElement('div');
+    //     mainContent.className = 'main-content';
+    //     // Move all children of main into mainContent
+    //     while (main.firstChild) {
+    //         mainContent.appendChild(main.firstChild);
+    //     }
+    //     main.appendChild(mainContent);
+    // }
+
+    // --- Functions from the second DOMContentLoaded block ---
+
     // Mobile menu toggle functionality
     const setupMobileMenu = () => {
         const mobileMenuButton = document.querySelector('.mobile-menu-toggle');
-        const navMenu = document.querySelector('nav ul');
-        
+        const navMenu = document.querySelector('header nav ul'); // Be more specific for the nav menu
+
         if (mobileMenuButton && navMenu) {
             mobileMenuButton.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
-                mobileMenuButton.classList.toggle('active');
+                mobileMenuButton.classList.toggle('active'); // Toggle active class on button too
             });
+        } else {
+            // console.warn('Mobile menu button or nav menu not found.');
         }
     };
-    
+
     // Add active class to navigation items based on current page
     const setActiveNavItem = () => {
         const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('nav ul li a');
-        
+        const navLinks = document.querySelectorAll('header nav ul li a'); // Be more specific
+
         navLinks.forEach(link => {
+            link.classList.remove('active'); // Remove active from all first
             const linkPath = link.getAttribute('href');
-            if (linkPath === currentPath || 
-                (currentPath.includes(linkPath) && linkPath !== '/')) {
+            // Basic matching, might need refinement for complex URLs or query params
+            if (linkPath === currentPath || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
                 link.classList.add('active');
             }
         });
+        // Handle root path ("/") separately if needed, e.g., ensure only exact match
+        if (currentPath === '/') {
+            const homeLink = document.querySelector('header nav ul li a[href="/"]');
+            if (homeLink) homeLink.classList.add('active');
+        }
     };
-    
+
     // Form validation
     const setupFormValidation = () => {
         const forms = document.querySelectorAll('form[data-validate="true"]');
-        
+
         forms.forEach(form => {
             form.addEventListener('submit', function(e) {
                 let isValid = true;
+                // Clear previous errors
+                form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+                form.querySelectorAll('.error-message-text').forEach(el => el.remove());
+
+
                 const requiredFields = form.querySelectorAll('[required]');
-                
                 requiredFields.forEach(field => {
                     if (!field.value.trim()) {
                         isValid = false;
-                        
-                        // Create or update error message
-                        let errorMsg = field.nextElementSibling;
-                        if (!errorMsg || !errorMsg.classList.contains('error-message')) {
-                            errorMsg = document.createElement('div');
-                            errorMsg.classList.add('error-message');
-                            field.parentNode.insertBefore(errorMsg, field.nextSibling);
-                        }
-                        
-                        errorMsg.textContent = `${field.getAttribute('data-name') || 'Field'} is required`;
-                        field.classList.add('input-error');
+                        displayFieldError(field, `${field.dataset.name || 'This field'} is required.`);
                     }
                 });
-                
-                // Email validation
+
                 const emailFields = form.querySelectorAll('input[type="email"]');
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                
                 emailFields.forEach(field => {
-                    if (field.value.trim() && !emailRegex.test(field.value.trim())) {
+                    if (field.value.trim() && !isValidEmail(field.value.trim())) {
                         isValid = false;
-                        
-                        // Create or update error message
-                        let errorMsg = field.nextElementSibling;
-                        if (!errorMsg || !errorMsg.classList.contains('error-message')) {
-                            errorMsg = document.createElement('div');
-                            errorMsg.classList.add('error-message');
-                            field.parentNode.insertBefore(errorMsg, field.nextSibling);
-                        }
-                        
-                        errorMsg.textContent = 'Please enter a valid email address';
-                        field.classList.add('input-error');
+                        displayFieldError(field, 'Please enter a valid email address.');
                     }
                 });
-                
-                // Password validation
+
                 const passwordField = form.querySelector('input[type="password"][data-validate-password="true"]');
-                const confirmPasswordField = form.querySelector('input[data-password-confirm="true"]');
-                
                 if (passwordField && passwordField.value.trim()) {
-                    // Check password strength
                     if (passwordField.value.length < 8) {
                         isValid = false;
-                        
-                        let errorMsg = passwordField.nextElementSibling;
-                        if (!errorMsg || !errorMsg.classList.contains('error-message')) {
-                            errorMsg = document.createElement('div');
-                            errorMsg.classList.add('error-message');
-                            passwordField.parentNode.insertBefore(errorMsg, passwordField.nextSibling);
-                        }
-                        
-                        errorMsg.textContent = 'Password must be at least 8 characters long';
-                        passwordField.classList.add('input-error');
+                        displayFieldError(passwordField, 'Password must be at least 8 characters long.');
                     }
-                    
-                    // Check if passwords match
-                    if (confirmPasswordField && confirmPasswordField.value.trim() && 
+
+                    const confirmPasswordField = form.querySelector('input[type="password"][data-password-confirm="true"]'); // Ensure type="password"
+                    if (confirmPasswordField && confirmPasswordField.value.trim() &&
                         passwordField.value !== confirmPasswordField.value) {
                         isValid = false;
-                        
-                        let errorMsg = confirmPasswordField.nextElementSibling;
-                        if (!errorMsg || !errorMsg.classList.contains('error-message')) {
-                            errorMsg = document.createElement('div');
-                            errorMsg.classList.add('error-message');
-                            confirmPasswordField.parentNode.insertBefore(errorMsg, confirmPasswordField.nextSibling);
-                        }
-                        
-                        errorMsg.textContent = 'Passwords do not match';
-                        confirmPasswordField.classList.add('input-error');
+                        displayFieldError(confirmPasswordField, 'Passwords do not match.');
                     }
                 }
-                
+
+
                 if (!isValid) {
                     e.preventDefault();
                 }
             });
-            
+
             // Clear errors on input
             const inputs = form.querySelectorAll('input, textarea, select');
             inputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    this.classList.remove('input-error');
-                    
-                    const errorMsg = this.nextElementSibling;
-                    if (errorMsg && errorMsg.classList.contains('error-message')) {
-                        errorMsg.textContent = '';
-                    }
+                    clearFieldError(this);
+                });
+                input.addEventListener('change', function() { // Also on change for select, etc.
+                    clearFieldError(this);
                 });
             });
         });
     };
-    
+
+    function displayFieldError(field, message) {
+        field.classList.add('input-error');
+        let errorMsgElement = field.parentNode.querySelector(`.error-message-text[data-for="${field.id || field.name}"]`);
+        if (!errorMsgElement) {
+            errorMsgElement = document.createElement('div');
+            errorMsgElement.classList.add('error-message-text'); // Use a different class to avoid conflict with general .error-message
+            errorMsgElement.dataset.for = field.id || field.name;
+            // Insert after the field or its label
+            const parent = field.parentNode;
+            if (parent.tagName.toLowerCase() === 'label') {
+                parent.parentNode.insertBefore(errorMsgElement, parent.nextSibling);
+            } else {
+                parent.insertBefore(errorMsgElement, field.nextSibling);
+            }
+        }
+        errorMsgElement.textContent = message;
+        errorMsgElement.style.display = 'block';
+    }
+
+    function clearFieldError(field) {
+        field.classList.remove('input-error');
+        const errorMsgElement = field.parentNode.querySelector(`.error-message-text[data-for="${field.id || field.name}"]`);
+        if (errorMsgElement) {
+            errorMsgElement.style.display = 'none';
+            // errorMsgElement.remove(); // Or remove it completely
+        }
+    }
+
+
     // File upload preview
     const setupFileUploadPreview = () => {
         const fileInputs = document.querySelectorAll('input[type="file"][data-preview="true"]');
-        
         fileInputs.forEach(input => {
-            const previewContainer = document.querySelector(input.getAttribute('data-preview-container'));
-            
+            const previewContainerId = input.dataset.previewContainer;
+            const previewContainer = document.querySelector(previewContainerId);
+
             if (previewContainer) {
                 input.addEventListener('change', function() {
-                    previewContainer.innerHTML = '';
-                    
+                    previewContainer.innerHTML = ''; // Clear previous previews
                     if (this.files && this.files.length > 0) {
-                        for (let i = 0; i < this.files.length; i++) {
-                            const file = this.files[i];
-                            
-                            // Check if it's an image
-                            if (file.type.match('image.*')) {
+                        Array.from(this.files).forEach(file => {
+                            if (file.type.startsWith('image/')) {
                                 const reader = new FileReader();
-                                
                                 reader.onload = function(e) {
                                     const img = document.createElement('img');
                                     img.src = e.target.result;
                                     img.classList.add('file-preview');
+                                    img.style.maxWidth = '100px'; // Add some basic styling
+                                    img.style.maxHeight = '100px';
+                                    img.style.margin = '5px';
                                     previewContainer.appendChild(img);
                                 };
-                                
                                 reader.readAsDataURL(file);
                             } else {
-                                // For non-image files, show file name
                                 const fileInfo = document.createElement('div');
                                 fileInfo.classList.add('file-info');
-                                fileInfo.textContent = file.name;
+                                fileInfo.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
                                 previewContainer.appendChild(fileInfo);
                             }
-                        }
+                        });
                     }
                 });
+            } else {
+                // console.warn(`Preview container not found for input: ${previewContainerId}`);
             }
         });
     };
-    
-    // Initialize all functions
-    setupMobileMenu();
-    setActiveNavItem();
-    setupFormValidation();
-    setupFileUploadPreview();
-    
+
     // Add fade-in animation to elements with fade-in class
     const animateFadeIn = () => {
         const fadeElements = document.querySelectorAll('.fade-in');
-        
-        const fadeInObserver = new IntersectionObserver((entries) => {
+        if (!('IntersectionObserver' in window)) {
+            console.log('IntersectionObserver not supported, showing all .fade-in elements immediately.');
+            fadeElements.forEach(el => el.classList.add('visible'));
+            return;
+        }
+
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    fadeInObserver.unobserve(entry.target);
+                    observer.unobserve(entry.target); // Stop observing once visible
                 }
             });
-        }, { threshold: 0.1 });
-        
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
         fadeElements.forEach(element => {
             fadeInObserver.observe(element);
         });
     };
-    
-    if ('IntersectionObserver' in window) {
-        animateFadeIn();
-    } else {
-        // Fallback for browsers that don't support IntersectionObserver
-        document.querySelectorAll('.fade-in').forEach(el => {
-            el.classList.add('visible');
-        });
-    }
+
+    // Initialize all setup functions
+    setupMobileMenu();
+    setActiveNavItem();
+    setupFormValidation();
+    setupFileUploadPreview();
+    animateFadeIn(); // Call animateFadeIn
+
+    console.log('All event listeners and initializations are set up.');
 });

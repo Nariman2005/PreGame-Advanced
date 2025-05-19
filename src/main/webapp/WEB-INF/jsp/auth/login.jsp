@@ -1,5 +1,96 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<section class="login-section">
+    <div class="container">
+        <h2 class="section-title">Sign in to your account</h2>
+        
+        <div class="login-form-container">
+            <% if (request.getAttribute("error") != null) { %>
+                <div class="alert alert-danger">
+                    <%= request.getAttribute("error") %>
+                </div>
+            <% } %>
+            
+            <% if (request.getAttribute("success") != null) { %>
+                <div class="alert alert-success">
+                    <%= request.getAttribute("success") %>
+                </div>
+            <% } %>
+            
+            <form action="${pageContext.request.contextPath}/auth" method="post" class="login-form">
+                <input type="hidden" name="action" value="login">
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </div>
+            </form>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="${pageContext.request.contextPath}/auth?action=register">Register</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<jsp:include page="../common/footer.jsp" />
+<jsp:include page="../common/header.jsp">
+    <jsp:param name="title" value="Login" />
+</jsp:include>
+
+<section class="login-section">
+    <div class="container">
+        <h2 class="section-title">Sign in to your account</h2>
+        
+        <div class="login-form-container">
+            <% if (request.getAttribute("error") != null) { %>
+                <div class="alert alert-danger">
+                    <%= request.getAttribute("error") %>
+                </div>
+            <% } %>
+            
+            <% if (request.getAttribute("success") != null) { %>
+                <div class="alert alert-success">
+                    <%= request.getAttribute("success") %>
+                </div>
+            <% } %>
+            
+            <form action="${pageContext.request.contextPath}/auth" method="post" class="login-form">
+                <input type="hidden" name="action" value="login">
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </div>
+            </form>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="${pageContext.request.contextPath}/auth?action=register">Register</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<jsp:include page="../common/footer.jsp" />
 <jsp:include page="../common/header.jsp">
     <jsp:param name="title" value="Login" />
 </jsp:include>
