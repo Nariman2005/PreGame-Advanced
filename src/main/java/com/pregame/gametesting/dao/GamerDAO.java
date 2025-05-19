@@ -210,58 +210,58 @@ public class GamerDAO extends BaseDAO {
     
         return gamer;
     }
-        public static void main(String[] args) {
-            GamerDAO dao = new GamerDAO();
-
-            try {
-                // Test insert
-                Gamer newGamer = new Gamer("TestUser", "password123", "test@example.com");
-                System.out.println("Inserting new gamer...");
-                dao.insertGamer(newGamer);
-                System.out.println("Inserted gamer with ID: " + newGamer.getGamerId());
-
-                // Test get by ID
-                System.out.println("\nTesting getGamerById...");
-                Gamer retrievedGamer = dao.getGamerById(newGamer.getGamerId());
-                System.out.println("Retrieved: " + retrievedGamer);
-
-                // Test get by email
-                System.out.println("\nTesting getGamerByEmail...");
-                Gamer retrievedByEmail = dao.getGamerByEmail("test@example.com");
-                System.out.println("Retrieved by email: " + retrievedByEmail);
-
-                // Test update
-                System.out.println("\nTesting update...");
-                retrievedGamer.setLevel(2);
-                retrievedGamer.setAge(26);
-                boolean updated = dao.updateGamer(retrievedGamer);
-                System.out.println("Update successful: " + updated);
-
-                // Verify update
-                Gamer afterUpdate = dao.getGamerById(retrievedGamer.getGamerId());
-                System.out.println("After update: " + afterUpdate);
-
-                // Test get all
-                System.out.println("\nTesting getAllGamers...");
-                List<Gamer> allGamers = dao.getAllGamers();
-                System.out.println("Total gamers: " + allGamers.size());
-                for (Gamer g : allGamers) {
-                    System.out.println(" - " + g);
-                }
-
-                // Test delete
-                System.out.println("\nTesting delete...");
-                boolean deleted = dao.deleteGamer(newGamer.getGamerId());
-                System.out.println("Delete successful: " + deleted);
-
-                // Verify delete
-                Gamer shouldBeNull = dao.getGamerById(newGamer.getGamerId());
-                System.out.println("After delete, gamer exists: " + (shouldBeNull != null));
-
-            } catch (SQLException e) {
-                System.err.println("Test failed with error:");
-                e.printStackTrace();
-            }
-
-    }
+//        public static void main(String[] args) {
+//            GamerDAO dao = new GamerDAO();
+//
+//            try {
+//                // Test insert
+//                Gamer newGamer = new Gamer("TestUser", "password123", "test@example.com");
+//                System.out.println("Inserting new gamer...");
+//                dao.insertGamer(newGamer);
+//                System.out.println("Inserted gamer with ID: " + newGamer.getGamerId());
+//
+//                // Test get by ID
+//                System.out.println("\nTesting getGamerById...");
+//                Gamer retrievedGamer = dao.getGamerById(newGamer.getGamerId());
+//                System.out.println("Retrieved: " + retrievedGamer);
+//
+//                // Test get by email
+//                System.out.println("\nTesting getGamerByEmail...");
+//                Gamer retrievedByEmail = dao.getGamerByEmail("test@example.com");
+//                System.out.println("Retrieved by email: " + retrievedByEmail);
+//
+//                // Test update
+//                System.out.println("\nTesting update...");
+//                retrievedGamer.setLevel(2);
+//                retrievedGamer.setAge(26);
+//                boolean updated = dao.updateGamer(retrievedGamer);
+//                System.out.println("Update successful: " + updated);
+//
+//                // Verify update
+//                Gamer afterUpdate = dao.getGamerById(retrievedGamer.getGamerId());
+//                System.out.println("After update: " + afterUpdate);
+//
+//                // Test get all
+//                System.out.println("\nTesting getAllGamers...");
+//                List<Gamer> allGamers = dao.getAllGamers();
+//                System.out.println("Total gamers: " + allGamers.size());
+//                for (Gamer g : allGamers) {
+//                    System.out.println(" - " + g);
+//                }
+//
+//                // Test delete
+//                System.out.println("\nTesting delete...");
+//                boolean deleted = dao.deleteGamer(newGamer.getGamerId());
+//                System.out.println("Delete successful: " + deleted);
+//
+//                // Verify delete
+//                Gamer shouldBeNull = dao.getGamerById(newGamer.getGamerId());
+//                System.out.println("After delete, gamer exists: " + (shouldBeNull != null));
+//
+//            } catch (SQLException e) {
+//                System.err.println("Test failed with error:");
+//                e.printStackTrace();
+//            }
+//
+//    }
 }
