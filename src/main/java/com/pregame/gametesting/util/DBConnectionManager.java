@@ -1,20 +1,18 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
-package com.gamingplatform.util;
+package com.pregame.gametesting.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DB {
-    public DB() {
+public class DBConnectionManager {
+    // Load the driver in a static block to ensure it's loaded
+    // before any static methods are called
+    static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException var2) {
-            throw new ExceptionInInitializerError("MySQL JDBC Driver not found");
+            System.out.println("MySQL JDBC driver loaded successfully");
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionInInitializerError("MySQL JDBC Driver not found: " + e.getMessage());
         }
     }
 
@@ -29,6 +27,5 @@ public class DB {
             System.err.println("Connection failed:");
             e.printStackTrace();
         }
-
     }
 }
