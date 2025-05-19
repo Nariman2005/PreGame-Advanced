@@ -5,522 +5,319 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%; /* Ensure html element takes full height */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f5f7fa;
+    background-color: #f0f2f5; /* Light background for the whole page (matches image's outer area) */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Or height: 100%; if html has height: 100% */
 }
 
 .container {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1100px; /* Standard container width */
     margin: 0 auto;
     padding: 0 20px;
 }
 
 a {
     text-decoration: none;
-    color: #3a5cf5;
+    color: #3a5cf5; /* Primary link color */
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #233da2;
-}
-
-ul {
-    list-style: none;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 50px;
-    font-size: 2.5rem;
-    color: #233da2;
-    position: relative;
-    padding-bottom: 15px;
-}
-
-.section-title:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: #233da2;
-    border-radius: 2px;
+    color: #233da2; /* Darker shade for hover */
 }
 
 /* Buttons */
 .btn {
     display: inline-block;
-    padding: 12px 30px;
-    border-radius: 30px;
+    padding: 10px 25px; /* Adjusted padding for button */
+    border-radius: 6px; /* Slightly less rounded buttons */
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 14px;
-    letter-spacing: 1px;
+    font-size: 0.9rem; /* Adjusted font size */
+    letter-spacing: 0.5px;
     transition: all 0.3s ease;
     cursor: pointer;
     text-align: center;
+    border: none;
 }
 
 .btn-primary {
-    background-color: #3a5cf5;
+    background-color: #4A6ADA; /* Blue from image for button */
     color: white;
-    border: 2px solid #3a5cf5;
 }
 
 .btn-primary:hover {
-    background-color: #233da2;
-    border-color: #233da2;
+    background-color: #3b57b3; /* Darker blue for hover */
     color: white;
 }
 
-.btn-secondary {
-    background-color: transparent;
-    color: #3a5cf5;
-    border: 2px solid #3a5cf5;
-}
-
-.btn-secondary:hover {
-    background-color: #3a5cf5;
-    color: white;
-}
-
-.btn-outline {
-    background-color: transparent;
-    color: #3a5cf5;
-    border: 2px solid #3a5cf5;
-    padding: 8px 20px;
-    font-size: 13px;
-}
-
-.btn-outline:hover {
-    background-color: #3a5cf5;
-    color: white;
-}
-
-/* Header */
+/* Header Styles (Minimal - assuming header.jsp handles most of it) */
+/* You would have more comprehensive header styles in your actual header.jsp's CSS */
 header {
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background-color: #ffffff; /* White background for header */
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    /* position: fixed; /* If you want a fixed header, adjust main content padding-top */
+    /* top: 0; */
+    /* z-index: 1000; */
 }
 
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
 }
 
-.logo h1 {
-    font-size: 1.8rem;
-    color: #233da2;
-}
-
-nav ul {
-    display: flex;
-}
-
-nav ul li {
-    margin-left: 30px;
-}
-
-nav ul li a {
-    color: #555;
-    font-weight: 600;
-    position: relative;
-}
-
-nav ul li a:hover {
-    color: #3a5cf5;
-}
-
-nav ul li a:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: #3a5cf5;
-    left: 0;
-    bottom: -4px;
-    transition: width 0.3s ease;
-}
-
-nav ul li a:hover:after {
-    width: 100%;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(rgba(24, 39, 103, 0.85), rgba(24, 39, 103, 0.85)), url('../images/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 120px 0;
-    text-align: center;
-}
-
-.hero-content h2 {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.hero-content p {
-    font-size: 1.3rem;
-    margin-bottom: 30px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-/* Features Section */
-.features {
-    padding: 100px 0;
-    background-color: white;
-}
-
-.feature-cards {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
-}
-
-.feature-card {
-    flex: 1;
-    min-width: 300px;
-    background: white;
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.feature-card .icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px;
-    background-color: #f0f5ff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.feature-card h3 {
+header .logo { /* Example for logo */
     font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #233da2;
-}
-
-.feature-card p {
-    margin-bottom: 25px;
-    color: #666;
-}
-
-/* Icon placeholders - to be replaced with actual icons */
-.developer-icon {
-    background: #f0f5ff url('../images/developer-icon.svg') no-repeat center;
-    background-size: 40px;
-}
-
-.tester-icon {
-    background: #f0f5ff url('../images/tester-icon.svg') no-repeat center;
-    background-size: 40px;
-}
-
-.gamer-icon {
-    background: #f0f5ff url('../images/gamer-icon.svg') no-repeat center;
-    background-size: 40px;
-}
-
-/* About Section */
-.about {
-    padding: 100px 0;
-    background-color: #f5f7fa;
-}
-
-.about-content {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 50px;
-}
-
-.about-text {
-    flex: 1;
-    min-width: 300px;
-}
-
-.about-image {
-    flex: 1;
-    min-width: 300px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.about-text h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #233da2;
-}
-
-.about-text p {
-    margin-bottom: 25px;
-    color: #555;
-}
-
-.benefits-list li {
-    margin-bottom: 10px;
-    padding-left: 25px;
-    position: relative;
-}
-
-.benefits-list li:before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #3a5cf5;
     font-weight: bold;
+    color: #1d2a57; /* Dark blue for "Game Testing Platform" text */
 }
 
-/* Contact Section */
-.contact {
-    padding: 100px 0;
-    background-color: white;
-}
-
-.contact-intro {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto 50px;
-    color: #555;
-}
-
-.contact-info {
+header nav ul {
+    list-style: none;
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 30px;
 }
 
-.contact-item {
-    flex: 1;
-    min-width: 250px;
-    text-align: center;
-    padding: 30px;
-    border-radius: 10px;
-    background: #f9fafc;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
+header nav ul li {
+    margin-left: 20px;
 }
 
-.contact-item:hover {
-    transform: translateY(-10px);
+header nav ul li a {
+    color: #333;
+    font-weight: 500;
+}
+header nav ul li a:hover {
+    color: #4A6ADA;
 }
 
-.contact-item .icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 20px;
-    background-color: #f0f5ff;
-    border-radius: 50%;
+
+/* Main Content Area (for sticky footer) */
+/* This auth-section will grow to push the footer down */
+.auth-section {
+    flex-grow: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center;     /* Vertically center the form container */
+    justify-content: center; /* Horizontally center the form container */
+    padding: 40px 0;         /* Add some padding top and bottom */
 }
 
-.contact-item h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    color: #233da2;
+/* Authentication Form Styling (as a distinct form box) */
+.auth-form-container {
+    background-color: #ffffff; /* White background for the form box */
+    padding: 30px 40px; /* Padding inside the form box */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
+    max-width: 400px; /* Max width for the form itself */
 }
 
-/* Footer */
-footer {
-    background-color: #182767;
-    color: white;
-    padding: 70px 0 20px;
+.auth-form-container h2 {
+    text-align: left; /* Align to left as in image */
+    margin-bottom: 25px;
+    font-size: 1.5rem; /* "Login to Your Account" */
+    color: #1d2a57; /* Dark text color */
+    font-weight: 600;
 }
 
-.footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 40px;
-    margin-bottom: 50px;
-}
-
-.footer-logo {
-    flex: 2;
-    min-width: 250px;
-}
-
-.footer-logo h2 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-}
-
-.footer-logo p {
-    color: #a0aee1;
-}
-
-.footer-links, .footer-social {
-    flex: 1;
-    min-width: 200px;
-}
-
-.footer-links h3, .footer-social h3 {
-    font-size: 1.3rem;
+/* Error Message Styling */
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 4px;
     margin-bottom: 20px;
-    position: relative;
-    padding-bottom: 10px;
-}
-
-.footer-links h3:after, .footer-social h3:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 2px;
-    background: #3a5cf5;
-}
-
-.footer-links ul li {
-    margin-bottom: 10px;
-}
-
-.footer-links ul li a {
-    color: #a0aee1;
-    transition: color 0.3s ease;
-}
-
-.footer-links ul li a:hover {
-    color: white;
-}
-
-.social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-}
-
-.social-icon:hover {
-    background-color: #3a5cf5;
-}
-
-.footer-bottom {
+    border: 1px solid #ef9a9a;
     text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-bottom p {
-    color: #a0aee1;
     font-size: 0.9rem;
 }
 
-/* Responsive Design */
+.error-message p {
+    margin: 0;
+}
+
+/* Form Group Styling */
+.auth-form .form-group {
+    margin-bottom: 18px;
+}
+
+.auth-form .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #454545;
+    font-size: 0.85rem;
+}
+
+.auth-form .form-group input[type="text"],
+.auth-form .form-group input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc; /* Border for inputs */
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+}
+
+.auth-form .form-group input[type="text"]:focus,
+.auth-form .form-group input[type="password"]:focus {
+    border-color: #4A6ADA; /* Highlight border on focus */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 106, 218, 0.2);
+}
+
+/* Remember Me Checkbox Styling */
+.auth-form .form-group.remember-me {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 5px; /* Little space before it */
+    margin-bottom: 20px; /* More space after it before button */
+}
+
+.auth-form .form-group.remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    width: auto;
+    accent-color: #4A6ADA;
+    position: relative;
+    top: -1px; /* Align checkbox better with text */
+}
+
+.auth-form .form-group.remember-me label {
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+/* Button within the form */
+.auth-form .form-group .btn {
+    width: auto; /* Button not full width as per image */
+    padding: 10px 30px; /* Specific padding for login button */
+}
+
+/* Authentication Links (Register, Forgot Password) */
+.auth-links {
+    margin-top: 20px;
+    text-align: left; /* Align to left as in image */
+}
+
+.auth-links p {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.auth-links p:last-child {
+    margin-bottom: 0;
+}
+
+.auth-links a {
+    font-weight: 500;
+    color: #4A6ADA; /* Links color match button */
+}
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Styles (Minimal - assuming footer.jsp handles most of it) */
+/* You would have more comprehensive footer styles in your actual footer.jsp's CSS */
+footer {
+    background-color: #1d2a57; /* Dark blue from image */
+    color: #a0aee1; /* Light text color for footer */
+    padding: 40px 0 20px;
+    width: 100%;
+    margin-top: auto; /* This is also key for sticky footer with flexbox */
+}
+
+footer .container {
+    /* Add flex layout for footer columns if needed */
+}
+.footer-content { /* If you have columns in footer */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.footer-column {
+    flex: 1;
+    min-width: 200px; /* Adjust as needed */
+}
+.footer-column h4 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+.footer-column ul li a {
+    color: #a0aee1;
+}
+.footer-column ul li a:hover {
+    color: #ffffff;
+}
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #3c4d82; /* Lighter separator line */
+    font-size: 0.85rem;
+    color: #8b9acc;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .hero-content h2 {
-        font-size: 2.5rem;
+    .auth-form-container {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 25px;
     }
-    
-    .hero-content p {
-        font-size: 1rem;
+    header .container {
+        flex-direction: column;
+        align-items: flex-start;
     }
-    
-    .feature-card {
-        min-width: 100%;
+    header nav {
+        margin-top: 10px;
     }
-    
-    .about-text, .about-image {
-        min-width: 100%;
-    }
-    
-    .contact-item {
-        min-width: 100%;
-    }
-    
-    .footer-logo, .footer-links, .footer-social {
-        min-width: 100%;
-        text-align: center;
-    }
-    
-    .footer-links h3:after, .footer-social h3:after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    
-    .social-icons {
-        justify-content: center;
+    header nav ul {
+        padding-left: 0;
     }
 }
 
-@media (max-width: 576px) {
-    header .container {
+@media (max-width: 480px) {
+    .auth-form-container {
+        max-width: calc(100% - 30px); /* Ensure some padding on very small screens */
+        padding: 20px;
+    }
+    .auth-form-container h2 {
+        font-size: 1.3rem;
+    }
+    .auth-form .form-group.remember-me,
+    .auth-links p {
+        font-size: 0.8rem;
+    }
+    .btn {
+        font-size: 0.85rem;
+        padding: 9px 20px;
+    }
+    .footer-content {
         flex-direction: column;
-    }
-    
-    nav ul {
-        margin-top: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    nav ul li {
-        margin: 0 10px 10px;
-    }
-    
-    .hero {
-        padding: 80px 0;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .section-title {
-        font-size: 2rem;
+        align-items: center;
+        text-align: center;
     }
 }

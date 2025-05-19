@@ -4,7 +4,7 @@ import java.math.BigDecimal; // For DECIMAL type from DB
 import java.util.Date;
 import java.util.Objects;
 
-public class Game {
+public class Game implements java.io.Serializable {
     private int gameId;
     private String title;
     private Date releaseDate;

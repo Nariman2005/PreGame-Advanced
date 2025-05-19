@@ -1,6 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,30 +18,24 @@
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     
-                    <c:choose>
-                        <c:when test="${empty sessionScope.user}">
-                            <li><a href="${pageContext.request.contextPath}/auth?action=login">Login</a></li>
-                            <li><a href="${pageContext.request.contextPath}/auth?action=register">Register</a></li>
-                        </c:when>
-                        <c:otherwise>
-                            <c:choose>
-                                <c:when test="${sessionScope.user.userType eq 'GAMER'}">
-                                    <li><a href="${pageContext.request.contextPath}/gamer/dashboard">Dashboard</a></li>
-                                </c:when>
-                                <c:when test="${sessionScope.user.userType eq 'DEVELOPER'}">
-                                    <li><a href="${pageContext.request.contextPath}/developer/dashboard">Dashboard</a></li>
-                                </c:when>
-                                <c:when test="${sessionScope.user.userType eq 'TESTER'}">
-                                    <li><a href="${pageContext.request.contextPath}/tester/dashboard">Dashboard</a></li>
-                                </c:when>
-                            </c:choose>
-                            <li><a href="${pageContext.request.contextPath}/games">Games</a></li>
-                            <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                            <li><a href="${pageContext.request.contextPath}/auth?action=logout">Logout</a></li>
-                        </c:otherwise>
-                    </c:choose>
+                    <% if (session.getAttribute("user") == null) { %>
+                        <li><a href="${pageContext.request.contextPath}/auth?action=login">Login</a></li>
+                        <li><a href="${pageContext.request.contextPath}/auth?action=register">Register</a></li>
+                    <% } else { %>
+                        <% String userType = (String) session.getAttribute("userType"); %>
+                        <% if ("GAMER".equals(userType)) { %>
+                            <li><a href="${pageContext.request.contextPath}/gamer/dashboard">Dashboard</a></li>
+                        <% } else if ("DEVELOPER".equals(userType)) { %>
+                            <li><a href="${pageContext.request.contextPath}/developer/dashboard">Dashboard</a></li>
+                        <% } %>
+                        <li><a href="${pageContext.request.contextPath}/games">Games</a></li>
+                        <li><a href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                        <li><a href="${pageContext.request.contextPath}/auth?action=logout">Logout</a></li>
+                    <% } %>
                 </ul>
             </nav>
         </div>
     </header>
-    <main>
+
+</body>
+</html>
