@@ -30,9 +30,7 @@
     String redirectParam = request.getParameter("redirect");
     if (redirectParam != null && redirectParam.equals("games")) {
 %>
-<jsp:forward page="/games">
-    <jsp:param name="source" value="homepage" />
-</jsp:forward>
+
 <%
     }
 

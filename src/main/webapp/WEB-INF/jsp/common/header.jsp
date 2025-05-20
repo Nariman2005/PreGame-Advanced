@@ -8,22 +8,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><c:out value="${param.title != null ? param.title : 'Game Testing Platform'}" /> - PreGame Testing</title>
 
-    <!-- ****** YOUR MAIN CSS FILE IS LINKED HERE ****** -->
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
-    <%-- This 'styles.css' should contain all the styles we worked on previously,
-         including styles for .register-section, .form-control, .btn, .alert, etc. --%>
+    <!-- ****** MAIN CSS FILE REFERENCE - CORRECTED TO style.css ****** -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 
     <!-- Optional: Link Font Awesome (if you use its icons in the header or elsewhere) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <%-- You can add other meta tags, or page-specific CSS links here if needed --%>
-    <%--
+    <%-- Page-specific CSS if provided as parameter --%>
     <c:if test="${param.pageSpecificCss != null}">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/${param.pageSpecificCss}.css">
     </c:if>
-    --%>
 </head>
 <body> <%-- The opening body tag is here --%>
 
