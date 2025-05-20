@@ -14,13 +14,13 @@ import com.pregame.gametesting.model.Admin;
 import java.sql.SQLException;
 
 public class UserService {
-    
+
     private UserDAO userDAO;
     private GamerDAO gamerDAO;
     private GameDeveloperDAO gameDeveloperDAO;
     private TesterDAO testerDAO;
     private AdminDAO adminDAO;
-    
+
     public UserService() {
         this.userDAO = new UserDAO();
         this.gamerDAO = new GamerDAO();
@@ -28,10 +28,10 @@ public class UserService {
         this.testerDAO = new TesterDAO();
         this.adminDAO = new AdminDAO();
     }
-    
+
     /**
      * Authenticate a user with email and password
-     * 
+     *
      * @param email User's email
      * @param password User's password
      * @return User object if authentication successful, null otherwise
@@ -39,13 +39,13 @@ public class UserService {
     public User authenticate(String email, String password) {
         // You might want to add password hashing here
         // password = PasswordUtil.hashPassword(password);
-        
+
         return userDAO.authenticate(email, password);
     }
-    
+
     /**
      * Register a new user
-     * 
+     *
      * @param user User object (Gamer, GameDeveloper, Tester, or Admin)
      * @return User ID if registration successful, -1 otherwise
      * @throws Exception if registration fails
@@ -55,15 +55,15 @@ public class UserService {
         if (!validateUserData(user)) {
             throw new IllegalArgumentException("Invalid user data");
         }
-        
+
         // Check if email already exists
         if (userDAO.emailExists(user.getEmail())) {
             throw new Exception("Email already registered");
         }
-        
+
         // Hash password
         // user.setPassword(PasswordUtil.hashPassword(user.getPassword()));
-        
+
         // Insert user based on type
         try {
             return userDAO.insertUser(user, user.getUserType());
@@ -71,10 +71,10 @@ public class UserService {
             throw new Exception("Registration failed: " + e.getMessage());
         }
     }
-    
+
     /**
      * Update user profile
-     * 
+     *
      * @param user User object with updated information
      * @return true if update successful, false otherwise
      * @throws Exception if update fails
@@ -84,11 +84,11 @@ public class UserService {
         if (!validateUserData(user)) {
             throw new IllegalArgumentException("Invalid user data");
         }
-        
+
         try {
             boolean success = false;
             String userType = user.getUserType();
-            
+
             switch (userType) {
                 case User.TYPE_GAMER:
                     success = gamerDAO.updateGamer((Gamer) user);
@@ -103,16 +103,16 @@ public class UserService {
                     success = adminDAO.updateAdmin((Admin) user);
                     break;
             }
-            
+
             return success;
         } catch (SQLException e) {
             throw new Exception("Update failed: " + e.getMessage());
         }
     }
-    
+
     /**
      * Delete user account
-     * 
+     *
      * @param userId User ID
      * @param userType Type of user
      * @return true if deletion successful, false otherwise
@@ -125,10 +125,10 @@ public class UserService {
             throw new Exception("Deletion failed: " + e.getMessage());
         }
     }
-    
+
     /**
      * Get user by ID and type
-     * 
+     *
      * @param userId User ID
      * @param userType Type of user
      * @return User object if found, null otherwise
@@ -141,21 +141,21 @@ public class UserService {
             throw new Exception("User retrieval failed: " + e.getMessage());
         }
     }
-    
+
     /**
      * Update user's last login time
-     * 
+     *
      * @param userId User ID
      * @param userType Type of user
      * @return true if update successful, false otherwise
      */
-    public boolean updateLastLogin(int userId, String userType) {
-        return userDAO.updateLastLogin(userId, userType);
-    }
-    
+//    public boolean updateLastLogin(int userId, String userType) {
+//        return userDAO.updateLastLogin(userId, userType);
+//    }
+
     /**
      * Validate user data
-     * 
+     *
      * @param user User object to validate
      * @return true if data is valid, false otherwise
      */
@@ -164,17 +164,17 @@ public class UserService {
         if (user.getEmail() == null || !user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             return false;
         }
-        
+
         // Validate password (at least 8 characters)
         if (user.getPassword() == null || user.getPassword().length() < 8) {
             return false;
         }
-        
+
         // Validate name
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             return false;
         }
-        
+
         return true;
     }
 //

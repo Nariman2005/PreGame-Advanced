@@ -150,52 +150,52 @@ public class UserDAO extends BaseDAO {
      * @param userId   User ID
      * @param userType Type of user (GAMER, DEVELOPER, TESTER)
      * @return true if update successful, false otherwise
-     */
-    public boolean updateLastLogin(int userId, String userType) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean success = false;
-
-        try {
-            conn = getConnection();
-
-            String tableName;
-            String idColumnName;
-
-            switch (userType) {
-                case User.TYPE_GAMER:
-                    tableName = "gamer";
-                    idColumnName = "gamer_id";
-                    break;
-                case User.TYPE_DEVELOPER:
-                    tableName = "gamedeveloper";
-                    idColumnName = "developer_id";
-                    break;
-                case User.TYPE_TESTER:
-                    tableName = "tester";
-                    idColumnName = "tester_id";
-                    break;
-                default:
-                    return false;
-            }
-
-            String query = "UPDATE " + tableName + " SET last_login_date = NOW() WHERE " + idColumnName + " = ?";
-
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, userId);
-
-            int rowsAffected = stmt.executeUpdate();
-            success = (rowsAffected > 0);
-
-        } catch (SQLException e) {
-            System.err.println("Error updating last login: " + e.getMessage());
-        } finally {
-            closeStatement(stmt);
-            closeConnection(conn);
-        }
-
-        return success;
-    }
+//     */
+//    public boolean updateLastLogin(int userId, String userType) {
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        boolean success = false;
+//
+//        try {
+//            conn = getConnection();
+//
+//            String tableName;
+//            String idColumnName;
+//
+//            switch (userType) {
+//                case User.TYPE_GAMER:
+//                    tableName = "gamer";
+//                    idColumnName = "gamer_id";
+//                    break;
+//                case User.TYPE_DEVELOPER:
+//                    tableName = "gamedeveloper";
+//                    idColumnName = "developer_id";
+//                    break;
+//                case User.TYPE_TESTER:
+//                    tableName = "tester";
+//                    idColumnName = "tester_id";
+//                    break;
+//                default:
+//                    return false;
+//            }
+//
+//            String query = "UPDATE " + tableName + " SET last_login_date = NOW() WHERE " + idColumnName + " = ?";
+//
+//            stmt = conn.prepareStatement(query);
+//            stmt.setInt(1, userId);
+//
+//            int rowsAffected = stmt.executeUpdate();
+//            success = (rowsAffected > 0);
+//
+//        } catch (SQLException e) {
+//            System.err.println("Error updating last login: " + e.getMessage());
+//        } finally {
+//            closeStatement(stmt);
+//            closeConnection(conn);
+//        }
+//
+//        return success;
+//    }
 
     /**
      * Get user by ID and type

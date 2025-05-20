@@ -1,88 +1,82 @@
+<%-- ../common/header.jsp --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${param.title} | PreGame Testing Platform</title>
-    
-    <!-- External CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-    <!-- App CSS - using absolute path to ensure it works in all contexts -->
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/styles.css">
-    
-    <!-- Make sure resources are not cached during development -->
-    
-    <!-- Test script for debugging -->
-    <script src="<%=request.getContextPath()%>/js/script.js"></script>
-    
-    <!-- Inline style to verify rendering -->
-    <style>
-        .css-test-indicator {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            background: blue;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            z-index: 1000;
-        }
-    </style>
+    <title><c:out value="${param.title != null ? param.title : 'Game Testing Platform'}" /> - PreGame Testing</title>
+
+    <!-- ****** YOUR MAIN CSS FILE IS LINKED HERE ****** -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <%-- This 'styles.css' should contain all the styles we worked on previously,
+         including styles for .register-section, .form-control, .btn, .alert, etc. --%>
+
+    <!-- Optional: Link Font Awesome (if you use its icons in the header or elsewhere) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <%-- You can add other meta tags, or page-specific CSS links here if needed --%>
+    <%--
+    <c:if test="${param.pageSpecificCss != null}">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/${param.pageSpecificCss}.css">
+    </c:if>
+    --%>
 </head>
-<body>
-    <!-- CSS loading indicator -->
-    <div class="css-test-indicator">CSS Loaded</div>
-    
-    <header class="main-header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="${pageContext.request.contextPath}/">
-                        <h1>Game Testing Platform</h1>
-                    </a>
-                </div>
-                
-                <nav class="main-nav">
-                    <ul class="nav-links">
-                        <li><a href="${pageContext.request.contextPath}/" class="nav-link">Home</a></li>
-                        <li><a href="${pageContext.request.contextPath}/games" class="nav-link">Games</a></li>
-                        <li><a href="${pageContext.request.contextPath}/testers" class="nav-link">Testers</a></li>
-                        <li><a href="${pageContext.request.contextPath}/developers" class="nav-link">Developers</a></li>
-                        <li><a href="${pageContext.request.contextPath}/about" class="nav-link">About</a></li>
-                    </ul>
-                </nav>
-                
-                <div class="auth-actions">
-                    <% if (session.getAttribute("user") != null) { %>
+<body> <%-- The opening body tag is here --%>
+
+<header class="main-header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <h1><a href="${pageContext.request.contextPath}/">PreGame Testing</a></h1>
+            </div>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="nav-links">
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/games">Games</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/about">About</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="auth-actions">
+                <c:choose>
+                    <c:when test="${sessionScope.user != null}">
                         <div class="user-dropdown">
-                            <button class="user-dropdown-btn">
-                                <i class="fas fa-user-circle"></i> <%= session.getAttribute("userName") %>
+                            <button class="user-dropdown-btn" aria-expanded="false" aria-controls="user-dropdown-content" type="button">
+                                <img src="${pageContext.request.contextPath}/images/avatars/default.png"
+                                     alt="${sessionScope.userName}'s avatar"
+                                     class="user-avatar">
+                                <span class="user-name">${sessionScope.userName}</span>
+                                <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 5px;"></i>
                             </button>
-                            <div class="user-dropdown-content">
-                                <a href="${pageContext.request.contextPath}/<%= session.getAttribute("userType") %>/dashboard">Dashboard</a>
-                                <a href="${pageContext.request.contextPath}/<%= session.getAttribute("userType") %>/profile">Profile</a>
-                                <a href="${pageContext.request.contextPath}/auth?action=logout">Logout</a>
+                            <div class="user-dropdown-content" id="user-dropdown-content">
+                                <ul>
+                                    <li><a href="${pageContext.request.contextPath}/user/dashboard">My Dashboard</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/user/settings">Settings</a></li>
+                                    <li><hr style="margin: 0.25rem 0; border-color: rgba(0,0,0,0.05);"></li>
+                                    <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                                </ul>
                             </div>
                         </div>
-                    <% } else { %>
+                    </c:when>
+                    <c:otherwise>
                         <a href="${pageContext.request.contextPath}/auth?action=login" class="btn btn-secondary">Login</a>
-                        <a href="${pageContext.request.contextPath}/auth?action=register" class="btn btn-primary">Register</a>
-                    <% } %>
-                </div>
-                
-                <div class="mobile-menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+                        <a href="${pageContext.request.contextPath}/register-choice" class="btn btn-primary">Register</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
-        </div>
-    </header>
-</body>
-</html>
 
-    
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</header>
+<%-- The header.jsp ends here. The content of gamer_register.jsp will be inserted after this. --%>
+

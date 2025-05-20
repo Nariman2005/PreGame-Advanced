@@ -382,7 +382,177 @@ document.addEventListener('DOMContentLoaded', function() {
             fadeInObserver.observe(element);
         });
     };
+/**
+ * PreGame Testing Platform
+ * Main JavaScript file for client-side functionality
+ */
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips if present
+    initTooltips();
+    
+    // Initialize game filter form if present
+    initGameFilter();
+    
+    // Enable responsive navigation menu
+    initResponsiveNav();
+    
+    // Animations for page elements
+    animatePageElements();
+});
+
+/**
+ * Initialize tooltip elements
+ */
+function initTooltips() {
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    
+    tooltips.forEach(tooltip => {
+        tooltip.addEventListener('mouseenter', function() {
+            const tooltipText = this.getAttribute('data-tooltip');
+            
+            const tooltipElement = document.createElement('div');
+            tooltipElement.className = 'tooltip';
+            tooltipElement.textContent = tooltipText;
+            
+            document.body.appendChild(tooltipElement);
+            
+            const rect = this.getBoundingClientRect();
+            tooltipElement.style.top = (rect.top - tooltipElement.offsetHeight - 5) + 'px';
+            tooltipElement.style.left = (rect.left + (rect.width / 2) - (tooltipElement.offsetWidth / 2)) + 'px';
+            
+            setTimeout(() => tooltipElement.classList.add('visible'), 10);
+        });
+        
+        tooltip.addEventListener('mouseleave', function() {
+            const tooltipElement = document.querySelector('.tooltip');
+            if (tooltipElement) {
+                tooltipElement.classList.remove('visible');
+                setTimeout(() => tooltipElement.remove(), 300);
+            }
+        });
+    });
+}
+
+/**
+ * Initialize game filter functionality
+ */
+function initGameFilter() {
+    const filterForm = document.querySelector('.game-filter form');
+    
+    if (filterForm) {
+        // Get URL parameters to set initial filter values
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameTypeParam = urlParams.get('gameType');
+        const esrbRatingParam = urlParams.get('esrbRating');
+        
+        // Set initial values if present in URL
+        if (gameTypeParam) {
+            const gameTypeSelect = filterForm.querySelector('#gameType');
+            gameTypeSelect.value = gameTypeParam;
+        }
+        
+        if (esrbRatingParam) {
+            const esrbRatingSelect = filterForm.querySelector('#esrbRating');
+            esrbRatingSelect.value = esrbRatingParam;
+        }
+    }
+}
+
+/**
+ * Initialize responsive navigation menu
+ */
+function initResponsiveNav() {
+    const header = document.querySelector('header');
+    
+    if (header) {
+        // Create mobile menu toggle button if it doesn't exist
+        if (!document.querySelector('.mobile-menu-toggle')) {
+            const mobileMenuToggle = document.createElement('button');
+            mobileMenuToggle.className = 'mobile-menu-toggle';
+            mobileMenuToggle.innerHTML = '<span></span><span></span><span></span>';
+            header.querySelector('.header-container').appendChild(mobileMenuToggle);
+            
+            // Toggle mobile menu on click
+            mobileMenuToggle.addEventListener('click', function() {
+                header.classList.toggle('mobile-menu-open');
+            });
+        }
+    }
+}
+
+/**
+ * Add animation to page elements
+ */
+function animatePageElements() {
+    // Fade in game cards with staggered delay
+    const gameCards = document.querySelectorAll('.game-card');
+    
+    gameCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        
+        setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+}
+
+/**
+ * Confirm deletion of a game
+ * @param {number} gameId - ID of the game to delete
+ */
+function confirmDelete(gameId) {
+    if (confirm("Are you sure you want to delete this game? This action cannot be undone.")) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = contextPath + '/games/delete';
+        
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = 'id';
+        idInput.value = gameId;
+        
+        form.appendChild(idInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+/**
+ * Show a notification message
+ * @param {string} message - The message to display
+ * @param {string} type - Message type (success, error, info)
+ */
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('visible');
+    }, 10);
+    
+    setTimeout(() => {
+        notification.classList.remove('visible');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 5000);
+}
+
+/**
+ * Set the context path for use in JavaScript
+ * This should be set in the JSP that includes this script
+ * @example <script>const contextPath = '${pageContext.request.contextPath}';</script>
+ */
+if (typeof contextPath === 'undefined') {
+    const contextPath = '';
+}
     // Initialize all setup functions
     setupMobileMenu();
     setActiveNavItem();

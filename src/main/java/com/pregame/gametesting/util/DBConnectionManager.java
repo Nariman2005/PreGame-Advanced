@@ -20,12 +20,12 @@ public class DBConnectionManager {
         return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/GameDB", "root", "root");
     }
 
-    public static void main(String[] args) {
-        try (Connection conn = getConnection()) {
-            System.out.println("Connection successful!");
-        } catch (SQLException e) {
-            System.err.println("Connection failed:");
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try (Connection conn = getConnection()) {
+//            System.out.println("Connection successful!");
+//        } catch (SQLException e) {
+//            System.err.println("Connection failed:");
+//            e.printStackTrace();
+//        }
+//    }
 }

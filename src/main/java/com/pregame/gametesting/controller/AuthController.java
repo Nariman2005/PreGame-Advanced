@@ -135,26 +135,10 @@ public class AuthController extends HttpServlet {
                 session.setAttribute("userName", user.getName());
                 
                 // Update last login time
-                userService.updateLastLogin(user.getId(), user.getUserType());
+//                userService.updateLastLogin(user.getId(), user.getUserType());
                 
-                // Redirect based on user type
-                switch (user.getUserType()) {
-                    case User.TYPE_ADMIN:
-                        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-                        break;
-                    case User.TYPE_DEVELOPER:
-                        response.sendRedirect(request.getContextPath() + "/developer/dashboard");
-                        break;
-                    case User.TYPE_TESTER:
-                        response.sendRedirect(request.getContextPath() + "/tester/dashboard");
-                        break;
-                    case User.TYPE_GAMER:
-                        response.sendRedirect(request.getContextPath() + "/gamer/dashboard");
-                        break;
-                    default:
-                        response.sendRedirect(request.getContextPath() + "/");
-                        break;
-                }
+                // Ensure redirect to browse page after successful login
+                response.sendRedirect(request.getContextPath() + "/games/browse");
             } else {
                 // Authentication failed
                 request.setAttribute("error", "Invalid email or password");

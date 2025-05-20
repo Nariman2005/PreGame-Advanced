@@ -1,4 +1,4 @@
- package com.pregame.gametesting.dao;
+package com.pregame.gametesting.dao;
 
 
  import com.pregame.gametesting.model.Game;
@@ -78,7 +78,12 @@ import java.math.BigDecimal; // For game size
     }
     
     public Game getGameById(int gameId) throws SQLException {
-        String sql = "SELECT GameID, Title, ReleaseDate, ESRB, Type, Size, Version, GameDeveloperID, DescriptionofGame FROM Game WHERE GameID = ?";
+        String sql = "SELECT g.GameID, g.Title, g.ReleaseDate, g.ESRB, g.Type, g.Size, g.Version, " +
+                "g.GameDeveloperID, g.DescriptionofGame, " +
+                "d.Name AS DeveloperName, d.GameDeveloperID " +
+                "FROM Game g " +
+                "LEFT JOIN GameDeveloper d ON g.GameDeveloperID = d.GameDeveloperID " +
+                "WHERE g.GameID = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -92,6 +97,15 @@ import java.math.BigDecimal; // For game size
             
             if (rs.next()) {
                 game = this.mapResultSetToGame(rs);
+
+                // Set developer info if available
+                String developerName = rs.getString("DeveloperName");
+                if (developerName != null) {
+                    GameDeveloper developer = new GameDeveloper();
+                    developer.setName(developerName);
+                    developer.setGameDeveloperid(rs.getInt("GameDeveloperID"));
+                    game.setDeveloper(developer);
+                }
             }
         } finally {
             closeResources(conn, stmt, rs);
@@ -99,24 +113,129 @@ import java.math.BigDecimal; // For game size
         return game;
     }
 
-    public List<Game> getAllGames() throws SQLException {
-        List<Game> games = new ArrayList<>();
-        String sql = "SELECT GameID, Title, ReleaseDate, ESRB, Type, Size, Version, GameDeveloperID, DescriptionofGame FROM Game";
+    /**
+     * Retrieves all games from the database with optional filtering by type and ESRB rating.
+     * @param type The game type to filter by (can be null or empty for no filter)
+     * @param esrbRating The ESRB rating to filter by (can be null or empty for no filter)
+     * @return A list of games matching the filter criteria
+     * @throws SQLException if a database access error occurs
+     */
+    public List<Game> getFilteredGames(String type, String esrbRating) throws SQLException {
+        StringBuilder sqlBuilder = new StringBuilder(
+            "SELECT g.GameID, g.Title, g.ReleaseDate, g.ESRB, g.Type, g.Size, g.Version, " +
+            "g.GameDeveloperID, g.DescriptionofGame, " +
+            "d.Name AS DeveloperName " +
+            "FROM Game g " +
+            "LEFT JOIN GameDeveloper d ON g.GameDeveloperID = d.GameDeveloperID " +
+            "WHERE 1=1"
+        );
+
+        List<Object> params = new ArrayList<>();
+
+        // Add type filter if provided
+        if (type != null && !type.isEmpty()) {
+            sqlBuilder.append(" AND g.Type = ?");
+            params.add(type);
+        }
+
+        // Add ESRB rating filter if provided
+        if (esrbRating != null && !esrbRating.isEmpty()) {
+            sqlBuilder.append(" AND g.ESRB = ?");
+            params.add(esrbRating);
+        }
+
+        sqlBuilder.append(" ORDER BY g.Title");
+        String sql = sqlBuilder.toString();
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-    
+        List<Game> games = new ArrayList<>();
+
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(sql);
+
+            // Set parameters
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
             rs = stmt.executeQuery();
-    
+
             while (rs.next()) {
-                games.add(this.mapResultSetToGame(rs));
+                Game game = mapResultSetToGame(rs);
+
+                // Set developer info if available
+                String developerName = rs.getString("DeveloperName");
+                if (developerName != null) {
+                    GameDeveloper developer = new GameDeveloper();
+                    developer.setName(developerName);
+                    game.setDeveloper(developer);
+                }
+
+                games.add(game);
             }
         } finally {
             closeResources(conn, stmt, rs);
         }
+
+        return games;
+    }
+
+    /**
+     * Retrieves all games from the database.
+     * @return A list of all games in the database
+     * @throws SQLException if a database access error occurs
+     */
+    public List<Game> getAllGames() throws SQLException {
+        return getFilteredGames(null, null);
+    }
+
+    /**
+     * Retrieves all games by a specific developer.
+     * @param developerId The developer ID to filter by
+     * @return A list of games created by the specified developer
+     * @throws SQLException if a database access error occurs
+     */
+    public List<Game> getGamesByDeveloperId(int developerId) throws SQLException {
+        String sql =
+            "SELECT g.GameID, g.Title, g.ReleaseDate, g.ESRB, g.Type, g.Size, g.Version, " +
+            "g.GameDeveloperID, g.DescriptionofGame, " +
+            "d.Name AS DeveloperName " +
+            "FROM Game g " +
+            "LEFT JOIN GameDeveloper d ON g.GameDeveloperID = d.GameDeveloperID " +
+            "WHERE g.GameDeveloperID = ? " +
+            "ORDER BY g.Title";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Game> games = new ArrayList<>();
+
+        try {
+            conn = getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, developerId);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Game game = mapResultSetToGame(rs);
+
+                // Set developer info
+                String developerName = rs.getString("DeveloperName");
+                if (developerName != null) {
+                    GameDeveloper developer = new GameDeveloper();
+                    developer.setName(developerName);
+                    game.setDeveloper(developer);
+                }
+
+                games.add(game);
+            }
+        } finally {
+            closeResources(conn, stmt, rs);
+        }
+
         return games;
     }
     
@@ -287,3 +406,4 @@ import java.math.BigDecimal; // For game size
 //        }
 //    }
 }
+
