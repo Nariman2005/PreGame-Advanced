@@ -142,23 +142,6 @@ public class UserService {
         }
     }
 
-    /**
-     * Update user's last login time
-     *
-     * @param userId User ID
-     * @param userType Type of user
-     * @return true if update successful, false otherwise
-     */
-//    public boolean updateLastLogin(int userId, String userType) {
-//        return userDAO.updateLastLogin(userId, userType);
-//    }
-
-    /**
-     * Validate user data
-     *
-     * @param user User object to validate
-     * @return true if data is valid, false otherwise
-     */
     private boolean validateUserData(User user) {
         // Validate email format
         if (user.getEmail() == null || !user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {

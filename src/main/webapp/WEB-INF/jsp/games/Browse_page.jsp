@@ -18,7 +18,7 @@
     <h1 class="text-center">Browse Games</h1>
 
     <div class="filter-form">
-        <form action="browse" method="get">
+        <form action="${pageContext.request.contextPath}/games/browse" method="get">
             <select name="type">
                 <option value="">All Types</option>
                 <option value="Action" ${selectedType == 'Action' ? 'selected' : ''}>Action</option>

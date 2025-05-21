@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import jakarta.mail.MessagingException;
 
 @WebServlet("/auth/*")
 public class AuthController extends HttpServlet {
@@ -168,7 +169,24 @@ public class AuthController extends HttpServlet {
                 
                 if (userId > 0) {
                     // Registration successful
-                    request.setAttribute("success", "Registration successful! Please log in.");
+                    request.setAttribute("success", "Registration successful! Please check your email for confirmation and log in.");
+
+                    // Send welcome email to the user
+                    try {
+                        String emailSubject = "Welcome to PreGame Testing Platform";
+                        String emailBody = "Dear " + user.getName() + ",\n\n"
+                                + "Thank you for registering with the PreGame Testing Platform as a " + formatUserType(userType) + ".\n\n"
+                                + "Your account has been successfully created. You can now log in using your email and password.\n\n"
+                                + "If you have any questions or need assistance, please don't hesitate to contact us.\n\n"
+                                + "Best regards,\n"
+                                + "The PreGame Team";
+
+                        MailSender.send(user.getEmail(), emailSubject, emailBody);
+                    } catch (MessagingException e) {
+                        // Log the error but don't stop the registration process
+                        System.err.println("Failed to send welcome email: " + e.getMessage());
+                    }
+
                     request.getRequestDispatcher("/WEB-INF/jsp/auth/login.jsp").forward(request, response);
                 } else {
                     // Registration failed
@@ -189,6 +207,20 @@ public class AuthController extends HttpServlet {
         }
     }
     
+    // Helper method to format user type for email
+    private String formatUserType(String userType) {
+        switch (userType) {
+            case "gamer":
+                return "Gamer";
+            case "developer":
+                return "Game Developer";
+            case "tester":
+                return "Tester";
+            default:
+                return "User";
+        }
+    }
+
     private User createUserFromRequest(HttpServletRequest request, String userType) {
         // Get common user fields
         String name = request.getParameter("name");
